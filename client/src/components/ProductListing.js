@@ -1,11 +1,28 @@
-import sampleProducts from  "../../mockData/data.js"
+import { useState, useEffect } from 'react';
 import Product from "./Product";
 
 const ProductListing = () => {
-  const productElements = sampleProducts.map(({ id, title, quantity, price }) => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const getProducts = async () => {
+      const options = {
+        method: 'GET',
+      };
+
+      const response = await fetch('/api/products', options);
+
+      setProducts(await response.json());
+      console.log(products);
+    };
+
+    getProducts();
+  }, []);
+
+  const productElements = products.map(({ _id, title, quantity, price }) => {
     return ( 
      <Product 
-       key={id} 
+       key={_id} 
        title={title} 
        quantity={quantity} 
        price={price} 

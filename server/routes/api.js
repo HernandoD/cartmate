@@ -93,8 +93,13 @@ const Product = require("../models/product");
 const CartItem = require("../models/cartItem");
 
 router.get("/products", (req, res, next) => {
+  console.log('OUTSIDE FIND');
   Product.find({})
-    .then((products) => res.json(products))
+    .then((products) => {
+      console.log('RIGHT HERE');
+      console.log(products);
+      res.json(products);
+    })
     .catch(next);
 });
 
