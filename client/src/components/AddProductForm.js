@@ -1,49 +1,38 @@
-import { useState } from 'react';
+import { useState } from "react";
+import { addProduct } from "../services/productService";
 
 const AddProductForm = ({ onAddProduct }) => {
-  const [formValues, setFormValues] = useState({
-    "product-name": '',
-    "product-price": '',
-    "product-quantity": '',
-  });
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
 
-  const handleFormChange = (e) => {
-    const { target } = e;
-    let { type, name, value } = target;
-
-    if (type === 'number' && value !== '') {
-      value = Number(value);
-    }
-
-    setFormValues((prevValues) => {
-      const newValues = { ...prevValues };
-      newValues[name] = value;
-      console.log(newValues);
-      return newValues;
-    });
+  const resetForm = () => {
+    setName("");
+    setPrice("");
+    setQuantity("");
   };
 
-  const handleFormSubmit = async () => {
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: {
-        title: formValues['product-name'],
-        price: formValues['product-price'],
-        quantity: formValues['product-quantity'],
-      }
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const productData = {
+      title: name,
+      price: Number(price),
+      quantity: Number(quantity),
     };
 
-    try { // bookmark here
-      const newProduct = await fetch('/api/products', options);
+    try {
+      onAddProduct(await addProduct(productData));
+      resetForm();
+    } catch (e) {
+      console.error(e);
     }
-  }
+  };
 
   return (
     <div className="add-form visible">
-      <p><button className="add-product-button">Add A Product</button></p>
+      <p>
+        <button className="add-product-button">Add A Product</button>
+      </p>
       <h3>Add Product</h3>
       <form onSubmit={handleFormSubmit}>
         <div className="input-group">
@@ -52,9 +41,11 @@ const AddProductForm = ({ onAddProduct }) => {
             type="text"
             id="product-name"
             name="product-name"
-            value={formValues['product-name']}
-            onChange={handleFormChange}
-            placeholder='item name'
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+            placeholder="item name"
             required
           />
         </div>
@@ -66,9 +57,11 @@ const AddProductForm = ({ onAddProduct }) => {
             name="product-price"
             min="0"
             step="0.01"
-            value={formValues['product-price']}
-            onChange={handleFormChange}
-            placeholder='number'
+            value={price}
+            onChange={(e) => {
+              setPrice(e.target.value);
+            }}
+            placeholder="number"
             required
           />
         </div>
@@ -79,9 +72,11 @@ const AddProductForm = ({ onAddProduct }) => {
             id="product-quantity"
             name="product-quantity"
             min="0"
-            value={formValues['product-quantity']}
-            onChange={handleFormChange}
-            placeholder='number'
+            value={quantity}
+            onChange={(e) => {
+              setQuantity(e.target.value);
+            }}
+            placeholder="number"
             required
           />
         </div>
