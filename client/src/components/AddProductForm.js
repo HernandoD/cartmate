@@ -5,6 +5,7 @@ const AddProductForm = ({ onAddProduct }) => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [formVisible, setFormVisible] = useState(false);
 
   const resetForm = () => {
     setName("");
@@ -22,6 +23,7 @@ const AddProductForm = ({ onAddProduct }) => {
 
     try {
       onAddProduct(await addProduct(productData));
+      setFormVisible(false);
       resetForm();
     } catch (e) {
       console.error(e);
@@ -29,9 +31,14 @@ const AddProductForm = ({ onAddProduct }) => {
   };
 
   return (
-    <div className="add-form visible">
+    <div className={"add-form" + (formVisible ? " visible" : "")}>
       <p>
-        <button className="add-product-button">Add A Product</button>
+        <button
+          className="add-product-button"
+          onClick={() => setFormVisible(true)}
+        >
+          Add A Product
+        </button>
       </p>
       <h3>Add Product</h3>
       <form onSubmit={handleFormSubmit}>
@@ -82,7 +89,15 @@ const AddProductForm = ({ onAddProduct }) => {
         </div>
         <div className="actions form-actions">
           <button type="submit">Add</button>
-          <button type="button">Cancel</button>
+          <button
+            type="button"
+            onClick={() => {
+              setFormVisible(false);
+              resetForm();
+            }}
+          >
+            Cancel
+          </button>
         </div>
       </form>
     </div>

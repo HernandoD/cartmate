@@ -1,6 +1,11 @@
 import Product from "./Product";
 
-const ProductListing = ({ products, onUpdateProduct, onDeleteProduct }) => {
+const ProductListing = ({
+  products,
+  onUpdateProduct,
+  onDeleteProduct,
+  onAddCartItem,
+}) => {
   const productElements = products.map(({ _id, title, quantity, price }) => {
     return (
       <Product
@@ -11,6 +16,7 @@ const ProductListing = ({ products, onUpdateProduct, onDeleteProduct }) => {
         pid={_id}
         onUpdateProduct={onUpdateProduct}
         onDeleteProduct={onDeleteProduct}
+        onAddCartItem={onAddCartItem}
       />
     );
   });

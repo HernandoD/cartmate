@@ -1,6 +1,7 @@
 import { useState } from "react";
 import EditProductForm from "./EditProductForm";
 import { deleteProduct } from "../services/productService";
+import { addCartItem } from "../services/shoppingCartService";
 
 const Product = ({
   title,
@@ -9,6 +10,7 @@ const Product = ({
   pid,
   onUpdateProduct,
   onDeleteProduct,
+  onAddCartItem,
 }) => {
   const [editMode, setEditMode] = useState(false);
 
@@ -17,9 +19,24 @@ const Product = ({
       <div className="product-details">
         <h3>{title}</h3>
         <p className="price">${price}</p>
-        <p className="quantity">{quantity} left in stock</p>
+        <p className="quantity">
+          <span style={quantity === 0 ? { color: "red" } : {}}>{quantity}</span>{" "}
+          left in stock
+        </p>
         <div className="actions product-actions">
-          <button className="add-to-cart">Add to Cart</button>
+          <button
+            className="add-to-cart"
+            disabled={quantity === 0}
+            onClick={async () => {
+              try {
+                onAddCartItem(await addCartItem(pid));
+              } catch (e) {
+                console.log(e);
+              }
+            }}
+          >
+            Add to Cart
+          </button>
           <button
             className="edit"
             onClick={() => {
