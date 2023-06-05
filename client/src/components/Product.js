@@ -15,7 +15,10 @@ const Product = ({
   const [editMode, setEditMode] = useState(false);
 
   return (
-    <li className="product">
+    <li 
+      className="product" 
+      data-testid="product"
+    >
       <div className="product-details">
         <h3>{title}</h3>
         <p className="price">${price}</p>
